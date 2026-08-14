@@ -1,0 +1,26 @@
+name: Validate renovate config
+
+on:
+  pull_request:
+    paths:
+      - "*.json"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - id: files
+        run: |
+          set -euo pipefail
+          files=$(git ls-files | grep .json)
+          # https://stackoverflow.com/a/74232400
+          EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+          {
+            echo "files<<$EOF"
+            echo "$files"
+            echo "$EOF"
+          } >> "$GITHUB_OUTPUT"
+      - uses: suzuki-shunsuke/github-action-renovate-config-validator@ee9f69e1f683ed0d08225086482b34fc9abe9300 # v2.1.0
+        with:
+          config_file_path: ${{ steps.files.outputs.files }}
