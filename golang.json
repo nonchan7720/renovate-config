@@ -1,0 +1,100 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "github>nonchan7720/renovate-config:common"
+  ],
+  "packageRules": [
+    {
+      "description": "Go モジュールの全パッチ更新をまとめる。CI が通れば自動マージする",
+      "matchUpdateTypes": [
+        "patch"
+      ],
+      "matchManagers": [
+        "gomod"
+      ],
+      "groupName": "go patch dependencies",
+      "labels": [
+        "automerge-patch"
+      ],
+      "automerge": true,
+      "automergeType": "pr",
+      "platformAutomerge": true,
+      "prConcurrentLimit": 0
+    },
+    {
+      "description": "Go モジュールの minor 更新をまとめる（下の個別グループが優先）",
+      "matchManagers": [
+        "gomod"
+      ],
+      "matchUpdateTypes": [
+        "minor"
+      ],
+      "groupName": "go minor dependencies"
+    },
+    {
+      "matchManagers": [
+        "gomod",
+        "dockerfile",
+        "docker-compose"
+      ],
+      "matchPackageNames": [
+        "go",
+        "golang"
+      ],
+      "matchDatasources": [
+        "golang-version",
+        "docker"
+      ],
+      "groupName": "golang version",
+      "pinDigests": true
+    },
+    {
+      "description": "OpenTelemetry パッケージをまとめる",
+      "matchPackageNames": [
+        "/^go\\.opentelemetry\\.io\\//"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "major"
+      ],
+      "groupName": "opentelemetry"
+    },
+    {
+      "description": "go-redis パッケージをまとめる",
+      "matchPackageNames": [
+        "/^github\\.com\\/redis\\/go-redis/"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "major"
+      ],
+      "groupName": "go-redis"
+    },
+    {
+      "description": "golang.org/x パッケージをまとめる",
+      "matchPackageNames": [
+        "/^golang\\.org\\/x\\//"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "major"
+      ],
+      "groupName": "golang.org/x"
+    },
+    {
+      "description": "google.golang.org パッケージをまとめる",
+      "matchPackageNames": [
+        "/^google\\.golang\\.org\\//"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "major"
+      ],
+      "groupName": "google.golang.org"
+    }
+  ],
+  "postUpdateOptions": [
+    "gomodTidy",
+    "gomodUpdateImportPaths"
+  ]
+}
