@@ -1,0 +1,50 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":timezone(Asia/Tokyo)",
+    "docker:pinDigests",
+    "helpers:pinGitHubActionDigests"
+  ],
+  "minimumReleaseAge": "7 days",
+  "osvVulnerabilityAlerts": true,
+  "vulnerabilityAlerts": {
+    "labels": [
+      "renovate/security"
+    ],
+    "minimumReleaseAge": null
+  },
+  "packageRules": [
+    {
+      "description": "Github actions の全パッチ更新をまとめる。CI が通れば自動マージする",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "groupName": "all github-actions patch update",
+      "matchUpdateTypes": [
+        "patch"
+      ],
+      "labels": [
+        "renovate/github-actions",
+        "automerge-patch"
+      ],
+      "automerge": true,
+      "automergeType": "pr",
+      "platformAutomerge": true,
+      "prConcurrentLimit": 0
+    },
+    {
+      "description": "Github actions の全マイナー更新をまとめる。CI が通れば自動マージする",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "groupName": "all github-actions minor update",
+      "matchUpdateTypes": [
+        "minor"
+      ],
+      "labels": [
+        "renovate/github-actions"
+      ]
+    }
+  ]
+}
