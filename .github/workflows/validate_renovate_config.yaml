@@ -5,6 +5,9 @@ on:
     paths:
       - "*.json"
 
+permissions:
+  pull-requests: write
+
 jobs:
   renovate-validate:
     runs-on: ubuntu-latest
@@ -24,3 +27,8 @@ jobs:
       - uses: suzuki-shunsuke/github-action-renovate-config-validator@ee9f69e1f683ed0d08225086482b34fc9abe9300 # v2.1.0
         with:
           config_file_path: ${{ steps.files.outputs.files }}
+      - name: Approve pull request
+        if: ${{ github.event.pull_request.user.login == 'nonchan7720' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh pr review "${{ github.event.pull_request.html_url }}" --approve
